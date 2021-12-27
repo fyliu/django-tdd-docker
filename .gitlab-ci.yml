@@ -37,10 +37,14 @@ test:
     DATABASE_TEST_URL: postgresql://runner:runner@postgres:5432/users
   script:
     - cd app
-    - pytest -p no:warnings --cov=.
+    - python3.10 -m venv env
+    - source env/bin/activate
+    - pip install -r requirements.txt
+    - pip install black==21.12b0 flake8==4.0.1 isort==5.10.1 pytest==6.2.5 pytest-django==4.5.2
+    - pytest -p no:warnings
     - flake8 .
-    - black --check --exclude=migrations .
-    - isort . --check-only
+    - black . --check --exclude="migrations|env"
+    - isort . --check-only --skip env
 
 deploy:
   stage: deploy
