@@ -70,11 +70,27 @@ def test_get_all_movies(client, monkeypatch):
 
 
 def test_remove_movie(client, monkeypatch):
-    pass
+    def mock_get_object(self, pk):
+        class Movie:
+            def delete():
+                pass
+
+        return Movie
+
+    monkeypatch.setattr(MovieDetail, "get_object", mock_get_object)
+
+    resp = client.delete("/api/movies/1/")
+    assert resp.status_code == 204
 
 
 def test_remove_movie_incorrect_id(client, monkeypatch):
-    pass
+    def mock_get_object(self, pk):
+        raise Http404
+
+    monkeypatch.setattr(MovieDetail, "get_object", mock_get_object)
+
+    resp = client.delete("/api/movies/99/")
+    assert resp.status_code == 404
 
 
 def test_update_movie(client, monkeypatch):
