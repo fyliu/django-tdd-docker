@@ -1,5 +1,5 @@
 # pull official base image
-FROM python:3.9.5-slim-buster
+FROM python:3.10.1-slim-buster
 
 # set working directory
 WORKDIR /usr/src/app
@@ -15,8 +15,9 @@ RUN apt-get update \
 
 # install dependencies
 RUN pip install --upgrade pip
-COPY ./requirements.txt .
-RUN pip install -r requirements.txt
+COPY ./requirements.txt /usr/src/app/requirements.txt
+COPY ./requirements-dev.txt /usr/src/app/requirements-dev.txt
+RUN pip install -r requirements-dev.txt
 
 # copy entrypoint.sh
 COPY ./entrypoint.sh /usr/src/app/entrypoint.sh
