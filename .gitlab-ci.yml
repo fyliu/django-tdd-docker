@@ -41,10 +41,12 @@ test:
     - source env/bin/activate
     - pip install -r requirements.txt
     - pip install black==21.12b0 flake8==4.0.1 isort==5.10.1 pytest==6.2.5 pytest-django==4.5.2
+    - export DEBUG=1
     - pytest -p no:warnings
     - flake8 .
     - black . --check --exclude="migrations|env"
     - isort . --check-only --skip env
+    - export DEBUG=0
     - python manage.py check --deploy --fail-level=WARNING
 
 deploy:
