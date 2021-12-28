@@ -45,6 +45,7 @@ test:
     - flake8 .
     - black . --check --exclude="migrations|env"
     - isort . --check-only --skip env
+    - python manage.py check --deploy --fail-level=WARNING
 
 deploy:
   stage: deploy
