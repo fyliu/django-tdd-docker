@@ -2,6 +2,8 @@ from django.http import Http404
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 
 from .models import Movie
 from .serializers import MovieSerializer
@@ -13,6 +15,16 @@ class MovieList(APIView):
         serializer = MovieSerializer(movies, many=True)
         return Response(serializer.data)
 
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                "title": openapi.Schema(type=openapi.TYPE_STRING),
+                "genre": openapi.Schema(type=openapi.TYPE_STRING),
+                "year": openapi.Schema(type=openapi.TYPE_STRING),
+            },
+        )
+    )
     def post(self, request, format=None):
         serializer = MovieSerializer(data=request.data)
         if serializer.is_valid():
@@ -33,6 +45,16 @@ class MovieDetail(APIView):
         serializer = MovieSerializer(movie)
         return Response(serializer.data)
 
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                "title": openapi.Schema(type=openapi.TYPE_STRING),
+                "genre": openapi.Schema(type=openapi.TYPE_STRING),
+                "year": openapi.Schema(type=openapi.TYPE_STRING),
+            },
+        )
+    )
     def put(self, request, pk, format=None):
         movie = self.get_object(pk)
         serializer = MovieSerializer(movie, data=request.data)
