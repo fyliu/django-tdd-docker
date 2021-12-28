@@ -18,11 +18,14 @@ build:
     - cd app
     - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker pull $IMAGE:latest || true
+    - echo $SECRET_KEY
     - docker build
-      --cache-from $IMAGE:latest
-      --tag $IMAGE:latest
-      --file ./Dockerfile.prod
-      "."
+        --cache-from $IMAGE:latest
+        --cache-from $IMAGE:builder
+        --tag $IMAGE:latest
+        --file ./Dockerfile.prod
+        --build-arg SECRET_KEY=$SECRET_KEY
+        "."
     - docker push $IMAGE:latest
 
 test:
@@ -61,9 +64,10 @@ deploy:
     - apk add --no-cache curl
     - cd app
     - docker build
-      --tag $HEROKU_REGISTRY_IMAGE
-      --file ./Dockerfile.prod
-      "."
+        --tag $HEROKU_REGISTRY_IMAGE
+        --file ./Dockerfile.prod
+        --build-arg SECRET_KEY=$SECRET_KEY
+        "."
     - docker login -u _ -p $HEROKU_AUTH_TOKEN registry.heroku.com
     - docker push $HEROKU_REGISTRY_IMAGE
     - cd ..
