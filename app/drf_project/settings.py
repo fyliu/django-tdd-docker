@@ -156,6 +156,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "movies.CustomUser"
 
+REST_FRAMEWORK = {"DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema"}
 if not DEBUG:
     REST_FRAMEWORK = {
         "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",)
@@ -165,6 +166,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
-SWAGGER_SETTINGS = {
-    "USE_SESSION_AUTH": False
-}
+SWAGGER_SETTINGS = {"USE_SESSION_AUTH": False}
